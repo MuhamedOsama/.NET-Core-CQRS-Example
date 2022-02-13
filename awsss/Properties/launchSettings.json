@@ -1,0 +1,33 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:44725",
+      "sslPort": 0
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "AWS_SECRET_ACCESS_KEY": "VF3nc7qPaihP8Eg95OO1MACJbKLFDM1fg1ocCCK9z2E=",
+        "AWS_ACCESS_KEY_ID": "6a2d725b6e23e5b3a627506f464403150f02aa79",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "awsss": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:5000"
+    }
+  }
+}
