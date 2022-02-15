@@ -13,7 +13,6 @@ namespace awsss.Mapping
         public OrderProfile()
         {
             CreateMap<Order, OrderResponse>().ForMember(src => src.OrderItems,des => des.MapFrom(r => r.OrderProducts.Select(r => r.Product)));
-            CreateMap<CreateOrderRequest, Order>();
         }
     }
 }

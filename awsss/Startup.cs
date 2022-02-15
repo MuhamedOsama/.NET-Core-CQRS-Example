@@ -79,8 +79,6 @@ namespace awsss
             services.AddDefaultAWSOptions(options);
             services.AddAWSService<IAmazonS3>();
             services.AddHttpClient();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IOrderService, OrderService>();
             services.AddMediatR(typeof(Startup));
 
         }

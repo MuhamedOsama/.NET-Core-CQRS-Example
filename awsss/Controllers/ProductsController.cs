@@ -9,6 +9,9 @@ using awsss.Domain.Models;
 using awsss.Persistence;
 using awsss.Domain.Services;
 using awsss.Resources.Product;
+using MediatR;
+using awsss.Services.ProductService.Query;
+using awsss.Services.ProductService.Command;
 
 namespace awsss.Controllers
 {
@@ -17,22 +20,22 @@ namespace awsss.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IProductService _service;
-        public ProductsController(ApplicationDbContext context, IProductService service)
+        private readonly IMediator _mediator;
+        public ProductsController(ApplicationDbContext context, IMediator mediator)
         {
             _context = context;
-            _service = service;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<ProductResponse>>> GetProducts()
         {
-            return Ok(await _service.GetProducts());
+            return Ok(await _mediator.Send(new GetAllProductsQuery()));
         }
         [HttpPost]
-        public async Task<ActionResult<ProductResponse>> AddProduct(CreateProductRequest model)
+        public async Task<ActionResult<ProductResponse>> AddProduct(AddProductCommand model)
         {
-            return Ok(await _service.AddProduct(model));
+            return Ok(await _mediator.Send(model));
         }
     }
 }

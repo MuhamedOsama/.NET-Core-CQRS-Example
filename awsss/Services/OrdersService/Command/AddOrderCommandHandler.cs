@@ -1,42 +1,36 @@
 ﻿using AutoMapper;
 using awsss.Domain.Models;
-using awsss.Domain.Services;
 using awsss.Persistence;
 using awsss.Resources.Order;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace awsss.Services
+namespace awsss.Services.OrdersService.Command
 {
-    public class OrderService : IOrderService
+    public class AddOrderCommandHandler : IRequestHandler<AddOrderCommand, OrderResponse>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public OrderService(ApplicationDbContext context, IMapper mapper)
+        public AddOrderCommandHandler(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<OrderResponse>> GetOrders()
+        public async Task<OrderResponse> Handle(AddOrderCommand request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<List<OrderResponse>>(await _context.Orders.ToListAsync());
-        }
-        public async Task<OrderResponse> AddOrder(CreateOrderRequest model)
-        {
-            var order = new Order
-            {
-                
-            };
+            Order order = new();
             order.OrderProducts = new Collection<OrderProduct>();
-            await _context.AddAsync(order);
-            foreach (var productId in model.ProductIds)
+            await _context.AddAsync(order, cancellationToken);
+            foreach (var productId in request.ProductIds)
             {
-                var isProductExist = await _context.Products.AnyAsync(r => r.Id == productId);
+                var isProductExist = await _context.Products.AnyAsync(r => r.Id == productId, cancellationToken: cancellationToken);
                 if (isProductExist)
                 {
                     var product = await _context.Products.FindAsync(productId);

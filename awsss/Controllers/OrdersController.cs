@@ -9,6 +9,9 @@ using awsss.Domain.Models;
 using awsss.Persistence;
 using awsss.Domain.Services;
 using awsss.Resources.Order;
+using awsss.Services.OrdersService.Query;
+using MediatR;
+using awsss.Services.OrdersService.Command;
 
 namespace awsss.Controllers
 {
@@ -18,23 +21,26 @@ namespace awsss.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IOrderService _service;
+        private readonly IMediator _mediator;
 
-        public OrdersController(ApplicationDbContext context, IOrderService service)
+        public OrdersController(ApplicationDbContext context, IOrderService service, IMediator mediator)
         {
             _context = context;
             _service = service;
+            _mediator = mediator;
 
         }
 
         [HttpGet]
         public async Task<ActionResult<List<OrderResponse>>> GetOrders()
         {
-            return Ok(await _service.GetOrders());
+            var result = await _mediator.Send(new GetAllOrdersQuery());
+            return Ok(result);
         }
         [HttpPost]
-        public async Task<ActionResult<OrderResponse>> AddOrder(CreateOrderRequest model)
+        public async Task<ActionResult<OrderResponse>> AddOrder(AddOrderCommand model)
         {
-            return Ok(await _service.AddOrder(model));
+            return Ok(await _mediator.Send(model));
         }
 
 
